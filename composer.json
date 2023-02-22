@@ -25,7 +25,10 @@
     "autoload": {
         "psr-4": {
             "He426100\\": "src/"
-        }
+        },
+        "files": [
+            "src/functions.php"
+        ]
     },
     "config": {
         "sort-packages": true
