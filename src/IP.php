@@ -8,8 +8,10 @@ declare(strict_types=1);
  * @contact  mrpzx001@gmail.com
  * @license  https://github.com/he426100/hyperf-ip/blob/master/LICENSE
  */
+
 namespace He426100;
 
+use Hyperf\Context\Context;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\HttpServer\Contract\RequestInterface;
 
@@ -21,11 +23,6 @@ use Hyperf\HttpServer\Contract\RequestInterface;
  */
 class IP
 {
-    /**
-     * 当前请求的IP地址
-     */
-    protected string $realIP;
-
     public function __construct(private ConfigInterface $config, private RequestInterface $request)
     {
     }
@@ -35,11 +32,16 @@ class IP
      */
     public function getClientIP(): string
     {
-        if (! empty($this->realIP)) {
-            return $this->realIP;
+        $realIP = '';
+        $key = IP::class;
+        if (Context::has($key)) {
+            $realIP = Context::get($key);
+        }
+        if (!empty($realIP)) {
+            return $realIP;
         }
 
-        $this->realIP = $this->request->server('remote_addr', '');
+        $realIP = $this->request->server('remote_addr', '');
 
         // 如果获取到的客户端Ip属于可信代理ip则从header中获取真实ip
         $config = $this->config->get('ip', []);
@@ -48,15 +50,15 @@ class IP
             // 先这么写着，暂时只碰到过x-forwarded-for
             $tempIP = $this->request->header('x-forwarded-for');
             $tempIP = trim(explode(',', $tempIP)[0]);
-            if (! $this->isValidIP($tempIP)) {
+            if (!$this->isValidIP($tempIP)) {
                 $tempIP = null;
             }
             // tempIP不为空，说明获取到了一个IP地址
             // 这时我们检查 REMOTE_ADDR 是不是指定的前端代理服务器之一
             // 如果是的话说明该 IP头 是由前端代理服务器设置的
             // 否则则是伪装的
-            if (! empty($tempIP)) {
-                $realIPBin = $this->ip2bin($this->realIP);
+            if (!empty($tempIP)) {
+                $realIPBin = $this->ip2bin($realIP);
                 foreach ($trustedProxies as $ip) {
                     $serverIPElements = explode('/', $ip);
                     $serverIP = $serverIPElements[0];
@@ -69,18 +71,18 @@ class IP
                     }
 
                     if (strncmp($realIPBin, $serverIPBin, (int) $serverIPPrefix) === 0) {
-                        $this->realIP = $tempIP;
+                        $realIP = $tempIP;
                         break;
                     }
                 }
             }
         }
 
-        if (! $this->isValidIP($this->realIP)) {
-            $this->realIP = '0.0.0.0';
+        if (!$this->isValidIP($realIP)) {
+            $realIP = '0.0.0.0';
         }
 
-        return $this->realIP;
+        return Context::set($key, $realIP);
     }
 
     /**
