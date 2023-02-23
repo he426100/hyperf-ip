@@ -19,7 +19,7 @@ class ConfigProvider
             'aspects' => [],
             'publish' => [
                 [
-                    'id' => 'client-ip',
+                    'id' => 'config',
                     'description' => 'The configuration file of ClientIP.',
                     'source' => __DIR__ . '/../publish/ip.php',
                     'destination' => BASE_PATH . '/config/autoload/ip.php',
