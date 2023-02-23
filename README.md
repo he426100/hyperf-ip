@@ -13,5 +13,5 @@ composer require he426100/hyperf-client-ip
 - Publish
 
 ```bash
-php bin/hyperf.php vendor:publish he426100/hyperf-client-ip -i config
+php bin/hyperf.php vendor:publish he426100/hyperf-client-ip
 ```
