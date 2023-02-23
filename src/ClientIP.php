@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 /**
- * This file is part of he426100/hyperf-ip.
+ * This file is part of he426100/hyperf-client-ip.
  *
- * @link     https://github.com/he426100/hyperf-ip
+ * @link     https://github.com/he426100/hyperf-client-ip
  * @contact  mrpzx001@gmail.com
- * @license  https://github.com/he426100/hyperf-ip/blob/master/LICENSE
+ * @license  https://github.com/he426100/hyperf-client-ip/blob/master/LICENSE
  */
-
-namespace He426100;
+namespace He426100\ClientIP;
 
 use Hyperf\Context\Context;
 use Hyperf\Contract\ConfigInterface;
@@ -21,7 +20,7 @@ use Hyperf\HttpServer\Contract\RequestInterface;
  * @see https://github.com/symfony/symfony/blob/efb5c4907f54ddc84558736df692e7b1033fd2a3/src/Symfony/Component/HttpFoundation/Request.php#L775-L822
  * @see https://github.com/symfony/symfony/blob/808977847fa40f8323c4c850f8ae6f58cffad754/src/Symfony/Component/HttpFoundation/IpUtils.php#L37
  */
-class IP
+class ClientIP
 {
     public function __construct(private ConfigInterface $config, private RequestInterface $request)
     {
@@ -33,11 +32,11 @@ class IP
     public function getClientIP(): string
     {
         $realIP = '';
-        $key = IP::class;
+        $key = __CLASS__;
         if (Context::has($key)) {
             $realIP = Context::get($key);
         }
-        if (!empty($realIP)) {
+        if (! empty($realIP)) {
             return $realIP;
         }
 
@@ -50,14 +49,14 @@ class IP
             // 先这么写着，暂时只碰到过x-forwarded-for
             $tempIP = $this->request->header('x-forwarded-for');
             $tempIP = trim(explode(',', $tempIP)[0]);
-            if (!$this->isValidIP($tempIP)) {
+            if (! $this->isValidIP($tempIP)) {
                 $tempIP = null;
             }
             // tempIP不为空，说明获取到了一个IP地址
             // 这时我们检查 REMOTE_ADDR 是不是指定的前端代理服务器之一
             // 如果是的话说明该 IP头 是由前端代理服务器设置的
             // 否则则是伪装的
-            if (!empty($tempIP)) {
+            if (! empty($tempIP)) {
                 $realIPBin = $this->ip2bin($realIP);
                 foreach ($trustedProxies as $ip) {
                     $serverIPElements = explode('/', $ip);
@@ -78,7 +77,7 @@ class IP
             }
         }
 
-        if (!$this->isValidIP($realIP)) {
+        if (! $this->isValidIP($realIP)) {
             $realIP = '0.0.0.0';
         }
 

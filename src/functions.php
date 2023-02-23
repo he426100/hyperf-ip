@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 /**
- * This file is part of he426100/hyperf-ip.
+ * This file is part of he426100/hyperf-client-ip.
  *
- * @link     https://github.com/he426100/hyperf-ip
+ * @link     https://github.com/he426100/hyperf-client-ip
  * @contact  mrpzx001@gmail.com
- * @license  https://github.com/he426100/hyperf-ip/blob/master/LICENSE
+ * @license  https://github.com/he426100/hyperf-client-ip/blob/master/LICENSE
  */
-use He426100\IP;
+use He426100\ClientIP\ClientIP;
 use Hyperf\Utils\ApplicationContext;
 
 if (! function_exists('client_ip')) {
@@ -17,8 +17,8 @@ if (! function_exists('client_ip')) {
      */
     function client_ip(): string
     {
-        /** @var IP $ip */
-        $ip = ApplicationContext::getContainer()->get(IP::class);
+        /** @var ClientIP $ip */
+        $ip = ApplicationContext::getContainer()->get(ClientIP::class);
         return $ip->getClientIP();
     }
 }

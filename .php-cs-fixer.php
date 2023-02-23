@@ -1,11 +1,11 @@
 <?php
 
 $header = <<<'EOF'
-This file is part of he426100/hyperf-ip.
+This file is part of he426100/hyperf-client-ip.
 
-@link     https://github.com/he426100/hyperf-ip
+@link     https://github.com/he426100/hyperf-client-ip
 @contact  mrpzx001@gmail.com
-@license  https://github.com/he426100/hyperf-ip/blob/master/LICENSE
+@license  https://github.com/he426100/hyperf-client-ip/blob/master/LICENSE
 EOF;
 
 return (new PhpCsFixer\Config())

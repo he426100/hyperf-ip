@@ -1,4 +1,4 @@
-# hyperf-ip
+# hyperf-client-ip
 
 hyperf获取客户端真实ip组件，支持waf
 
@@ -7,11 +7,11 @@ hyperf获取客户端真实ip组件，支持waf
 - Request
 
 ```bash
-composer require he426100/hyperf-ip
+composer require he426100/hyperf-client-ip
 ```
 
 - Publish
 
 ```bash
-php bin/hyperf.php vendor:publish he426100/hyperf-ip -i config
+php bin/hyperf.php vendor:publish he426100/hyperf-client-ip -i config
 ```
