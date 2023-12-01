@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @license  https://github.com/he426100/hyperf-client-ip/blob/master/LICENSE
  */
 use He426100\ClientIP\ClientIP;
-use Hyperf\Utils\ApplicationContext;
+use Hyperf\Context\ApplicationContext;
 
 if (! function_exists('client_ip')) {
     /**
